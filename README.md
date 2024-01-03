@@ -1,2 +1,3 @@
-# pg_pro_1c
-Сборка docker-образа с Postgres_pro
+# Postgres-pro для 1с
+
+
