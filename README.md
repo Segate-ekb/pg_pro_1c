@@ -21,7 +21,7 @@ version: '3.8'
 services:
   srv:
     image: my-registry.com/onec-server:8.3.23.1997
-    hostname: sw-01.eff-tex.lan
+    hostname: sw-01.mycompany.lan
     environment:
       - PORT=1540
       - REGPORT=1541
