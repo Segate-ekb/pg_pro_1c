@@ -22,17 +22,18 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime && \
     wget --quiet http://repo.postgrespro.ru/1c-$SERVER_VERSION/keys/pgpro-repo-add.sh -O /tmp/pgpro-repo-add.sh && \
     sh /tmp/pgpro-repo-add.sh && \
     apt-get -y install postgrespro-1c-$SERVER_VERSION-server postgrespro-1c-$SERVER_VERSION-contrib && \
-    apt install -y perl && \
+    apt-get install -y perl && \
     wget --quiet -O /usr/bin/pgcompacttable "https://raw.githubusercontent.com/dataegret/pgcompacttable/master/bin/pgcompacttable" && \
     chmod +x /usr/bin/pgcompacttable && \
     wget --quiet -O /tmp/pgcenter_0.9.2_linux_amd64.deb "https://github.com/lesovsky/pgcenter/releases/download/v0.9.2/pgcenter_0.9.2_linux_amd64.deb" && \
     apt install -y /tmp/pgcenter_0.9.2_linux_amd64.deb && \
     apt-get clean && \
+    apt-get purge && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY container/docker-entrypoint.sh /
-COPY container/init-temp.sh /docker-entrypoint-startdb.d
-COPY container/init-getconfig.sh /docker-entrypoint-initdb.d
+COPY container/init-temp.sh /docker-entrypoint-startdb.d/
+COPY container/init-getconfig.sh /docker-entrypoint-initdb.d/
 
 RUN chmod 755 /docker-entrypoint.sh && \
     chmod +x /docker-entrypoint.sh && \
