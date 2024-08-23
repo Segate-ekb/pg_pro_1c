@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+# Загрузка переменных из файла .env
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+else
+    echo "Файл .env не найден"
+    exit 1
+fi
+
 docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
 
 if [ "$DOCKER_SYSTEM_PRUNE" = 'true' ] ; then
@@ -14,12 +22,12 @@ fi
 
 max_version="0.0.0"
 
-# Function to compare version numbers
+# Функция для сравнения версий
 version_gt() { 
     test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; 
 }
 
-# Loop through each argument
+# Цикл по всем переданным версиям
 for version in "$@"
 do
     echo "Building and pushing for version: $version"
@@ -32,13 +40,13 @@ do
 
     docker push segateekb/pg_pro:$version
 
-    # Update max_version if this version is greater
+    # Обновляем max_version, если текущая версия больше
     if version_gt $version $max_version; then
         max_version=$version
     fi
 done
 
-# Push the 'latest' tag with the max version
+# Пушим тег 'latest' для максимальной версии
 echo "Pushing 'latest' tag for max version: $max_version"
 docker build \
     --pull \
